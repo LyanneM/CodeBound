@@ -36,17 +36,26 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+
     }
 
     // Call this from other scripts when picking up computer parts
     public void PlayCollectAnimation()
     {
         anim.SetTrigger("collect");
+        
     }
 
     // Call this when player dies
     public void PlayDieAnimation()
     {
         anim.SetTrigger("die");
+
+        // Stop player movement
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        // Optional: stop physics from affecting the body
     }
+
+    
 }

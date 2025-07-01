@@ -1,37 +1,44 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager instance;
+    public static InventoryManager Instance;
 
-    public List<string> collectedParts = new List<string>();
-    public Text inventoryText; // Assign this in Inspector
+    private List<string> collectedItems = new List<string>();
+    public Text inventoryText; // 👉 drag the InventoryText UI object here
+
+    private bool isInventoryVisible = false;
 
     void Awake()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance == null)
+            Instance = this;
         else
             Destroy(gameObject);
     }
 
-    public void AddPart(string partName)
+    public void AddItem(string itemName)
     {
-        if (!collectedParts.Contains(partName))
-        {
-            collectedParts.Add(partName);
-            UpdateInventoryUI();
-        }
+        collectedItems.Add(itemName);
+        Debug.Log("Collected: " + itemName);
     }
 
-    void UpdateInventoryUI()
+    public void ToggleInventory()
     {
-        inventoryText.text = "Parts Collected:\n";
-        foreach (string part in collectedParts)
+        isInventoryVisible = !isInventoryVisible;
+
+        if (inventoryText != null)
         {
-            inventoryText.text += "• " + part + "\n";
+            inventoryText.gameObject.SetActive(isInventoryVisible);
+
+            if (isInventoryVisible)
+            {
+                inventoryText.text = "Collected Items:\n";
+                foreach (string item in collectedItems)
+                    inventoryText.text += "- " + item + "\n";
+            }
         }
     }
 }
